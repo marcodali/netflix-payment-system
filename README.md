@@ -1,4 +1,4 @@
-# Tailwind CSS example
+# Stripe external payment PoC
 
 <p>
   <!-- iOS -->
@@ -11,11 +11,9 @@
 
 ## 🚀 How to use
 
-- Install with `yarn` or `npm install`.
-- Run `yarn start` or `npm run start` to try it out.
+- Publish the app on expo gallery so everyone in the world can test it ```npx expo publish```
+- Run the app locally for ios, android and web ```npx expo start```
 
 ## 📝 Notes
 
 - This example using the [`tailwind-rn`](https://github.com/vadimdemedes/tailwind-rn) library to allow you to use [Tailwind CSS](https://tailwindcss.com/) in React Native.
-- You can even customize it to use your own styles or colors. Read more about that [here](https://github.com/vadimdemedes/tailwind-rn#customization).
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs/utility-first).
