@@ -1,38 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import 'react-native-get-random-values';
+import { WebView } from 'react-native-webview';
 import tailwind from 'tailwind-rn';
 import { useSubscription } from '@apollo/client';
-import { Video } from 'expo-av';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, Linking } from 'react-native';
 import { PAYMENT_STATUS_SUBSCRIPTION } from '../graphql/queries';
+import Toast from 'react-native-toast-message';
 
-export default function HomeScreen({ route }) {
-  const { username } = route.params;
+export default function HomeScreen() {
+  const id = '50e503cb-8409-4fef-91b0-7ed4bab59189'; // ID hardcodeado
   const [paid, setPaid] = useState(false);
-  
-  const { data, loading, error } = useSubscription(PAYMENT_STATUS_SUBSCRIPTION, {
-    variables: { username },
+
+  const { data, error } = useSubscription(PAYMENT_STATUS_SUBSCRIPTION, {
+    variables: { id },
+    onError: (e) => {
+      console.error("Subscription error: ", e);
+      Toast.show({
+        type: 'error',
+        text1: 'Subscription Error',
+        text2: e.message || 'An error occurred while subscribing.',
+      });
+    },
   });
 
   useEffect(() => {
     if (data) {
-      setPaid(data.paymentStatusChanged.paid);
+      setPaid(data.onPaymentStatusChanged.payment_status === 'PAID');
     }
   }, [data]);
 
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return <Text>Error! {error.message}</Text>;
+  if (error) {
+    console.error(error);
+    return <Text>Error! {error.message}</Text>;
+  }
 
   return (
     <View style={tailwind('flex-1 justify-center items-center')}>
       {paid ? (
         <>
-          <Video
-            source={{ uri: 'https://www.youtube.com/watch?v=TRY6gfKrokE' }}
-            rate={1.0}
-            volume={1.0}
-            isMuted={false}
-            resizeMode="cover"
-            shouldPlay
+          <WebView
+            source={{ uri: 'https://www.youtube.com/embed/TRY6gfKrokE' }}
             style={{ width: 300, height: 300 }}
           />
           <Text style={tailwind('text-xl mt-4')}>Aquí tienes tu contenido exclusivo, ¡disfruta!</Text>
@@ -40,13 +47,15 @@ export default function HomeScreen({ route }) {
       ) : (
         <>
           <Text style={tailwind('text-xl mb-4')}>Ups, todavía no pagas, disfruta la app en su versión gratuita</Text>
-          <Button
-            title="Si quieres actualizar tu plan y disfrutar de la versión premium con contenido exclusivo hazlo aquí"
+          <Text style={tailwind('text-xl mb-4')}>Te invitamos a disfrutar de la versión premium con contenido exclusivo</Text>
+          <Pressable
             onPress={() => {
               // Aquí dirigimos al usuario al backend para actualizar su plan
               Linking.openURL('https://brian.uva.beauty/');
             }}
-          />
+          >
+            <Text style={tailwind('text-blue-500 underline')}>Actualiza tu plan aquí</Text>
+          </Pressable>
         </>
       )}
     </View>

@@ -1,32 +1,30 @@
-import { ApolloClient, InMemoryCache, split, HttpLink } from '@apollo/client';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
+import { createAuthLink } from "aws-appsync-auth-link";
+import { createSubscriptionHandshakeLink } from "aws-appsync-subscription-link";
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  ApolloLink,
+} from "@apollo/client";
 
-const httpLink = new HttpLink({
-  uri: 'http://your-graphql-server.com/graphql',
-});
+import appSyncConfig from "./aws-exports";
 
-const wsLink = new WebSocketLink({
-  uri: `ws://your-graphql-server.com/graphql`,
-  options: {
-    reconnect: true,
-  },
-});
+const url = appSyncConfig.aws_appsync_graphqlEndpoint;
+const region = appSyncConfig.aws_appsync_region;
+const auth = {
+  type: appSyncConfig.aws_appsync_authenticationType,
+  apiKey: appSyncConfig.aws_appsync_apiKey,
+};
 
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
-  },
-  wsLink,
-  httpLink
-);
+const httpLink = new HttpLink({ uri: url });
+
+const link = ApolloLink.from([
+  createAuthLink({ url, region, auth }),
+  createSubscriptionHandshakeLink({ url, region, auth }, httpLink),
+]);
 
 const client = new ApolloClient({
-  link: splitLink,
+  link,
   cache: new InMemoryCache(),
 });
 

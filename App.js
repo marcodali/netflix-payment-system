@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { NavigationContainer } from '@react-navigation/native';
@@ -21,7 +22,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen} />
           </Stack.Navigator>
         </SafeAreaView>
-        <Toast ref={(ref) => Toast.setRef(ref)} />
+        <Toast />
       </NavigationContainer>
     </ApolloProvider>
   );

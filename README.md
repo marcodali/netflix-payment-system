@@ -11,8 +11,26 @@
 
 ## 🚀 How to use
 
-- Publish the app on expo gallery so everyone in the world can test it ```npx expo publish```
-- Run the app locally for ios, android and web ```npx expo start```
+- Publish the app on expo.dev to share the QR code and allow everyone to test it
+  ```sh
+  yarn update
+  ```
+- Run the app locally for ios, android and web
+  ```sh
+  yarn start
+  ```
+- Prior to publish the app in Google Play and App Store, you must generate builds
+  ```sh
+  yarn build
+  ```
+- Submit the iOS build to the App Store
+  ```sh
+  yarn submit:ios
+  ```
+- Submit the Android build to the Google Play Store
+  ```sh
+  yarn submit:android
+  ```
 
 ## 📝 Notes
 
