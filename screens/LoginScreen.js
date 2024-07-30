@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
 import tailwind from 'tailwind-rn';
 import Toast from 'react-native-toast-message';
 
@@ -18,7 +18,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     // Hardcoded username and password
-    if (username === 'profe' && password === 'santi') {
+    if (username !== '' && password === 'durazno') {
       navigation.navigate('Home', { username });
     } else {
       Toast.show({
@@ -45,7 +45,7 @@ export default function LoginScreen({ navigation }) {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Pressable onPress={onPress={handleLogin}}>
+      <Pressable onPress={handleLogin}>
         <Text style={tailwind('text-blue-500 underline')}>Login</Text>
       </Pressable>
     </View>

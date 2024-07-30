@@ -7,8 +7,8 @@ import { View, Text, Pressable, Linking } from 'react-native';
 import { PAYMENT_STATUS_SUBSCRIPTION } from '../graphql/queries';
 import Toast from 'react-native-toast-message';
 
-export default function HomeScreen() {
-  const id = '50e503cb-8409-4fef-91b0-7ed4bab59189'; // ID hardcodeado
+export default function HomeScreen({ route }) {
+  const id = route.params.username;
   const [paid, setPaid] = useState(false);
 
   const { data, error } = useSubscription(PAYMENT_STATUS_SUBSCRIPTION, {
@@ -51,7 +51,7 @@ export default function HomeScreen() {
           <Pressable
             onPress={() => {
               // Aquí dirigimos al usuario al backend para actualizar su plan
-              Linking.openURL('https://brian.uva.beauty/');
+              Linking.openURL('https://buy.stripe.com/test_00g6r33XO4UeeI09AA');
             }}
           >
             <Text style={tailwind('text-blue-500 underline')}>Actualiza tu plan aquí</Text>
